@@ -1,7 +1,13 @@
 import requests
-url = "https://api.github.com/invalid"
-response = requests.get(url)
-if response.status_code == 200:
-    print("Success!")
-elif response.status_code == 404:
-    print("Not Found")
+from requests.exceptions import HTTPError
+
+for url in ["https://api.github.com/invalid" , "https://api.github.com"]:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+    except Exception as err:
+        print(f"Other error occurred: {err}")
+    else:
+        print(f"Success!")
